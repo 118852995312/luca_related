@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import math
 from ..Norm import RMSNorm
 from .TransformerBlock import TransformerBlock,TransformerRotateBlock
-from ..embedding import BertEmbedding,ErineEmbedding
+from ..embeddings import BertEmbedding,ErineEmbedding
 from ..utils import precompute_freqs_cis
 from typing import List, Optional, Tuple, Union
 
@@ -65,15 +65,25 @@ class RotateTransformer_erineembedding(nn.Module):
 
     def forward(self,
                 inputs:torch.Tensor,
-                attention_mask:Optional[torch.FloatTensor] = None)->torch.Tensor:
-        x = self.embedding(inputs).to(self.device)
+                attention_mask:Optional[torch.FloatTensor] = None,
+                token_type_ids: Optional[torch.LongTensor] = None,
+                position_ids:Optional[torch.FloatTensor] = None,
+                inputs_embeds: Optional[torch.LongTensor] = None,
+                task_type_ids: Optional[torch.LongTensor] = None,
+                )->torch.Tensor:
+        x = self.embedding(input_ids = inputs,
+                           token_type_ids = token_type_ids,
+                           position_ids = position_ids,
+                           inputs_embeds = inputs_embeds,
+                           task_type_ids = task_type_ids
+                           ).to(self.device)
         self.freq_cis = self.freq_cis.to(x.device)
 
         mask = attention_mask[:,None,None,:]
 
 
         for transformer in self.transformerList:
-            x = transformer.forward(x, mask,self.freq_cis)
+            x = transformer.forward(x,self.freq_cis, mask)
         x = self.norm(x)
         return x
 
