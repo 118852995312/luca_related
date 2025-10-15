@@ -67,7 +67,7 @@ class TextClassifier(nn.Module):
     def __init__(self,config):
         super(TextClassifier,self).__init__()
         self.textcnn = TextCNN(config)
-        self.fc = nn.Linear(config.hidden_size * 4, config.num_class)
+        self.fc = nn.Linear(config.hidden_size * 4, config.num_labels)
         self.dropout = nn.Dropout(config.cnn_dropout)
 
         # self.classifier = nn.Linear(embed_dim, num_class)
