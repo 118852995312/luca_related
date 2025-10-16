@@ -143,7 +143,7 @@ args_path = {
     "trunc_type":"right",
     "seq_max_length":512,
     "buffer_size":10000,
-    "train_data_dir":"",
+    "train_data_dir":"/data-new/guqian/Luca_related/luca_plus/Data/test.csv",
     "valid_data_dir":"",
     "test_data_dir":"",
     "local_rank":-1,

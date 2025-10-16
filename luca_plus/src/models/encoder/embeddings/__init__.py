@@ -1,2 +1,2 @@
-from embeddings import BertEmbedding,ErineEmbedding
-from esm_embeddings import predict_embedding_esm
+from .embeddings import BertEmbedding,ErineEmbedding
+from .esm_embeddings import predict_embedding_esm

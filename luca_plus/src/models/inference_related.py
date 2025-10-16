@@ -1,4 +1,4 @@
-from new_bert_cnn import NewBertCNN
+from .new_bert_cnn import NewBertCNN
 import torch
 from transformers import get_scheduler,BertTokenizer,AutoTokenizer
 import codecs

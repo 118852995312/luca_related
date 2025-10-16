@@ -3,7 +3,7 @@
 import numpy as np
 import torch
 import os
-from embeddings import predict_embedding_esm
+from .embeddings import predict_embedding_esm
 class Encoder(object):
     def __init__(self,
                  input_type,

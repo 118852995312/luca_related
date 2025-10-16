@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import BCEWithLogitsLoss, MSELoss, CrossEntropyLoss
-from encoder import RotateTransformer_erineembedding,RotateTransformer
-from decoder import TextClassifier
-from activation import create_activate
+from .encoder import RotateTransformer_erineembedding,RotateTransformer
+from .decoder import TextClassifier
+from .activation import create_activate
 
 
 

@@ -1,1 +1,1 @@
-from textclassifier import TextClassifier
+from .textclassifier import TextClassifier
