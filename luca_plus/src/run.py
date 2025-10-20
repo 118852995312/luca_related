@@ -52,8 +52,8 @@ def load_train_data(args,parse_row_func):
         ),
         batched=False
     )
-    train_dataset = split_dataset_by_node(train_dataset, rank=args.local_rank, world_size=dist.get_world_size()) \
-        .shuffle(buffer_size=args.buffer_size, seed=args.seed)
+    # train_dataset = split_dataset_by_node(train_dataset, rank=args.local_rank, world_size=dist.get_world_size()) \
+    #     .shuffle(buffer_size=args.buffer_size, seed=args.seed)
 
     train_dataset = train_dataset.with_format("torch")
 
@@ -77,8 +77,8 @@ def load_valid_data(args,parse_row_func):
         ),
         batched=False
     )
-    valid_dataset = split_dataset_by_node(valid_dataset, rank=args.local_rank, world_size=dist.get_world_size()) \
-        .shuffle(buffer_size=args.buffer_size, seed=args.seed)
+    # valid_dataset = split_dataset_by_node(valid_dataset, rank=args.local_rank, world_size=dist.get_world_size()) \
+    #     .shuffle(buffer_size=args.buffer_size, seed=args.seed)
 
     valid_dataset = valid_dataset.with_format("torch")
 
