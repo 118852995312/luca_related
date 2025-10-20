@@ -161,7 +161,7 @@ class ErineEmbedding(nn.Module):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
         if not self.no_position_embeddings:
-            self.position_embeddings = getattr(config,"position_embeddding_type","absolute")
+            self.position_embeddings_type = getattr(config,"position_embeddding_type","absolute")
             self.register_buffer("position_ids",torch.arange(config.max_position_embeddings).expand((1,-1)))
         if not self.no_token_type_embeddings and not self.no_position_embeddings:
             self.register_buffer(

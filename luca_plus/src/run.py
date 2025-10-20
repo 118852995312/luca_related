@@ -8,6 +8,7 @@ import torch.distributed as dist
 import logging
 from trainer import train
 import os
+from transformers.models.bert.tokenization_bert import BertTokenizer
 from types import SimpleNamespace
 from tester import test
 logger = logging.getLogger(__name__)
@@ -38,7 +39,7 @@ class get_args:
 def load_train_data(args,parse_row_func):
     train_dataset = load_dataset('csv',
                                  data_dir=args.train_data_dir,
-                                 split='train',
+                                 split='test',
                                  streaming=True)
     train_dataset = train_dataset.map(
         lambda x: parse_row_func(
@@ -112,10 +113,10 @@ def load_test_data(args,parse_row_func):
 config_path = {
     "num_labels":2,
     "input_type":"seq_matrix",
-    "hidden_size":128,
-    "num_attention_heads":12,
+    "hidden_size":2560,
+    "num_attention_heads":8,
     "max_seq_len":512,
-    "num_layers":12,
+    "num_layers":4,
     "device":torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu"),
     "hidden_dropout_prob":0.1,
     "feedforward_dropout_prob":0.1,
@@ -130,9 +131,11 @@ config_path = {
     "cnn_dropout":0.1,
     "embedding_input_size":128,
     "embedding_fc_size":[128*4],
-    "seq_weight":-9999,
+    "seq_weight":None,
 "embedding_weight":-9999,
-    "truncation_seq_length":1000
+    "truncation_seq_length":1000,
+    "type_vocab_size":2,
+    "attention_probs_dropout_prob":0.1
 
 }
 
@@ -143,10 +146,10 @@ args_path = {
     "trunc_type":"right",
     "seq_max_length":512,
     "buffer_size":10000,
-    "train_data_dir":"/data-new/guqian/Luca_related/luca_plus/Data/test.csv",
+    "train_data_dir":"/data-new/guqian/Luca_related/luca_plus/Data",
     "valid_data_dir":"",
     "test_data_dir":"",
-    "local_rank":-1,
+    "local_rank":0,
     "seed":1234,
     "not_prepend_bos":True,
     "not_append_eos":True,
@@ -162,6 +165,12 @@ args_path = {
     "learning_rate":1e-4,
     "beta1":0.9,
     "beta2":0.98,
+    "no_cuda":False,
+    "vocab_path":"/data-new/guqian/Luca_related/luca_plus/vocab/subword_vocab_20000.txt",
+    "codes_file":"/data-new/guqian/Luca_related/luca_plus/vocab/protein_codes_rdrp_20000.txt",
+    "do_lower_case":False,
+    "model_path":""
+
 
 
 
@@ -263,3 +272,4 @@ def main():
         result = dict(("evaluation_" + k + "_{}".format(args.global_step_prefix), v) for k, v in result.items())
 
 
+main()

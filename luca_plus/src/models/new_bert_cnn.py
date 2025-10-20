@@ -23,6 +23,7 @@ class NewBertCNN(nn.Module):
         if self.has_seq_encoder:
             self.seq_encoder = RotateTransformer_erineembedding(config)
             self.seq_pooler = TextClassifier(config)
+            self.seq_linear = []
             for idx in range(len(config.seq_fc_size)):
                 linear = nn.Linear(config.hidden_size, config.seq_fc_size[idx])
                 self.seq_linear.append(linear)
@@ -31,6 +32,7 @@ class NewBertCNN(nn.Module):
             self.seq_linear = nn.ModuleList(self.seq_linear)
 
         if self.has_embedding_encoder:
+            self.embedding_linear = []
             self.embedding_pooler = TextClassifier(config)
             input_size = config.embedding_input_size
             for idx in range(len(config.embedding_fc_size)):
@@ -58,19 +60,12 @@ class NewBertCNN(nn.Module):
 
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-        self.output_mode = args.output_mode
-        if args and args.sigmoid:
-            if args.output_mode in ["binary_class", "binary-class"]:
-                self.classifier = nn.Linear(output_size, 1)
-            else:
-                self.classifier = nn.Linear(output_size, config.num_labels)
-            self.output = nn.Sigmoid()
+
+        self.classifier = nn.Linear(output_size, config.num_labels)
+        if self.num_labels > 1:
+            self.output = nn.Softmax(dim=-1)
         else:
-            self.classifier = nn.Linear(output_size, config.num_labels)
-            if self.num_labels > 1:
-                self.output = nn.Softmax(dim=-1)
-            else:
-                self.output = None
+            self.output = None
 
     def forward(
             self,
